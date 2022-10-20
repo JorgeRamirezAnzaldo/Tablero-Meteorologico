@@ -4,29 +4,34 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <!--Include stylesheet-->
     <link rel="stylesheet" href="./assets/css/style.css"/>
-    <title>Tablero meteorológico</title>
+    <title>Tablero meteorológico</title> <!--Title of the page-->
   </head>
 
   <body>
+    <!--Header of the page-->
     <header>
+      <!--Principal heading-->
       <h1>Weather Dashboard</h1>
     </header>
+    <!--Main element-->
     <main>
-        <container class="Container1">
-            <div class="CitiesDiv">
+        <container class="Container1"> <!--Container for city search and cities list-->
+            <div class="CitiesDiv"> <!--<div> containing the city search elements-->
                 <h1>Search for a city:</h1>
-                <input type="text" id="CityInput">
-                <button id="SearchButton">Search</button>
+                <input type="text" id="CityInput"> <!--Input element to introduce a city-->
+                <button id="SearchButton">Search</button> <!--Search button to find the weather of a city-->
             </div>
-            <div class="Lista" id="List">
+            <div class="Lista" id="List"> <!--<div> containing the cities list (dynamically created)-->
             </div>
         </container>
-        <container class="Container2">
-            <div class="Actual" id="Today">
+        <container class="Container2"> <!--Container for the actual weather and forecast-->
+            <div class="Actual" id="Today"> <!--<div> to place the actual weather-->
             </div>
             <h2>5-Day Forecast</h2>
-            <div class="Forecast">
+            <div class="Forecast"> <!--div to place the 5-day forecast-->
+                <!--Sections to be populated dynamically with the 5-day forecast-->
                 <section id="S1"></section>
                 <section id="S2"></section>
                 <section id="S3"></section>
@@ -35,6 +40,7 @@
             </div>
         </container>
     </main>
+    <!--Include scripts to use jquery, moment.js and the script with the logic-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="./assets/js/script.js"></script>
