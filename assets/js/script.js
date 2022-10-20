@@ -4,12 +4,13 @@ var City = "";
 var storedCities = [];
 var array = ["No local Storage"];
 var today = moment().format("(M/D/YYYY)");
+var out = "";
 
+out = "";
 renderCities();
 
 function renderCities(){
     storedCities = JSON.parse(localStorage.getItem("Cities"));
-    console.log(storedCities);
     if (storedCities !== null) { //If there is something in the localStorage
         array = storedCities; //Move the stored array
         for (var j = 0; j < array.length; j++){ //Loop for all the elements of the array
@@ -27,19 +28,15 @@ function getCity(event){
     if (idButton == "SearchButton"){
         City = $("#CityInput").val();
         $("#CityInput").val("");
-        console.log("Search button pressed");
         if (!array.includes(City)){
-            console.log("It is not included");
             var newButton = $("<button>");
             newButton.addClass("CityButton");
             newButton.text(City);
             $("#List").append(newButton);
             if (array[0] == "No local Storage"){
-                console.log("Remove placeholder");
                 array.splice(0,1);
             }
             array.push(City);
-            console.log(array);
             var almacenar = JSON.stringify(array); //Stringify the modified array
             localStorage.setItem("Cities", almacenar); //Store the stringified array
         }
@@ -50,35 +47,60 @@ function getCity(event){
 
 function ListCities(event){
     City = $(event.target).text();
-    console.log("Dynamic button pressed");
-    console.log(City);
     getweather(City);
 }
 
 function getweather(City){
-    var requestUrl1 = "https://api.openweathermap.org/data/2.5/forecast?q=" + City + "&appid=eb91e77d6629b99cd66827732381e9bd";
-    var requestUrl2 = "https://api.openweathermap.org/data/2.5/weather?q=" + City + "&appid=eb91e77d6629b99cd66827732381e9bd";
+    out = "";
+    var requestUrl1 = "https://api.openweathermap.org/data/2.5/forecast?q=" + City + "&appid=eb91e77d6629b99cd66827732381e9bd&units=imperial";
+    var requestUrl2 = "https://api.openweathermap.org/data/2.5/weather?q=" + City + "&appid=eb91e77d6629b99cd66827732381e9bd&units=imperial";
 
     fetch(requestUrl1)
     .then(function (response1) {
-        return response1.json();
+        if (response1.status === 404){
+            if (out === ""){ 
+                alert("You have introduced and invalid city name");
+            }
+            out = "X";
+          } else if ((response1.status === 401) || (response1.status === 429)){
+            if (out === ""){ 
+                alert("There is a problem with the API subscription, it is not possible to extract data");
+            }
+            out = "X";
+          } else{
+            return response1.json();
+          }
     })
     .then(function (data1) {
-        console.log('Forecast \n----------');
-        console.log(data1);
-        placeforecast(data1);
+        if (out === ""){
+            placeforecast(data1);
+        }
     });
-
+    
     fetch(requestUrl2)
     .then(function (response2) {
-        return response2.json();
+        if (response2.status === 404){
+            if (out === ""){ 
+                alert("You have introduced and invalid city name");
+            }
+            out = "X";
+        } else if ((response2.status === 401) || (response2.status === 429)){
+            if (out === ""){
+                alert("There is a problem with the API subscription, it is not possible to extract data");
+            }
+            out = "X";
+        } else{
+            return response2.json();
+        }
     })
     .then(function (data2) {
-        console.log('Today \n----------');
-        console.log(data2);
-        placetodaysweather(data2);
+        if (out === ""){
+            placetodaysweather(data2);
+        }
     });
+        
 }
+
 
 function placeforecast(data1){
     var time = data1.list[0].dt_txt;
@@ -87,17 +109,13 @@ function placeforecast(data1){
     var timenum = Number(timeh);
     var timenew = timenum - 3;
     var time3 = timenew + time2;
-    console.log(time3);
     for (var k = 1; k < 6; k++){
         var futureday = moment().add(k, "days").format("M/D/YYYY");
         var futuredaycomp = moment().add(k, "days").format("YYYY-MM-DD");
-        console.log(futureday);
-        console.log(futuredaycomp);
         for (var m = 0; m < data1.list.length; m++){
             var element = data1.list[m].dt_txt;
             if (element.search(futuredaycomp) !== -1 ){
                 if (data1.list[m].dt_txt.search(time3) !== -1 ){
-                    console.log(data1.list[m].dt_txt);
                     break;
                 }
             }
@@ -137,6 +155,7 @@ function placeforecast(data1){
 }
 
 function placetodaysweather(data2){
+    console.log(data2);
     $("#Today").html("");
     var line1 = $("<h1>");
     line1.attr("vertical-align", "middle");
@@ -145,8 +164,8 @@ function placetodaysweather(data2){
     var lineicon = $("<img>");
     lineicon.addClass("Icon");
     var iconlink =  "http://openweathermap.org/img/wn/" + data2.weather[0].icon + ".png";
-    console.log(iconlink);
     lineicon.attr("src", iconlink);
+    lineicon.attr("style", "position:relative; top:6px;");
     var line2 = $("<p>");
     var temp = data2.main.temp;
     line2.attr("style", "margin-left: 20px;");
@@ -168,6 +187,3 @@ function placetodaysweather(data2){
 
 $("button").on("click", getCity);
 $("#List").on("click", "button.CityButton", ListCities);
-
-
-//https://api.openweathermap.org/data/2.5/forecast?q=London&appid=eb91e77d6629b99cd66827732381e9bd
