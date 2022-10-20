@@ -47,6 +47,11 @@ header h1{
     margin-bottom: 15px;
 }
 
+#SearchButton:hover{
+    cursor:pointer;
+    background-color: rgb(32, 133, 228);
+}
+
 .CitiesDiv{
     border-width: 0px 0px 2px 0px;
     border-style: solid;
@@ -63,7 +68,7 @@ header h1{
     border-style: solid;
     border-color: black;
     margin-bottom: 40px;
-    height: 250px;
+    height: 200px;
 }
 
 .Forecast{
@@ -75,9 +80,23 @@ header h1{
 
 .Forecast section{
     width: 180px;
-    height: 200px;
+    height: 240px;
     background-color: rgb(32, 32, 43);
     color: white;
     margin-bottom: 20px;
     
+}
+
+.CityButton{
+    width:100%;
+    background-color:rgb(172, 170, 170);
+    margin-top: 10px;
+    border-color:gray;
+    border-style:solid;
+    height:30px;
+}
+
+.Icon{
+    width: 30px;
+    height:30px;
 }
